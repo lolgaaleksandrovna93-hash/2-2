@@ -1,50 +1,49 @@
 package com.example.smarthome;
 
+import lombok.Getter;
+
+@Getter
 public class Radio {
     private int currentStation;
     private int currentVolume;
+    private final int maxStations; // final: нельзя менять после создания
 
-    // Константы для границ
-    private static final int MIN_STATION = 0;
-    private static final int MAX_STATION = 9;
     private static final int MIN_VOLUME = 0;
     private static final int MAX_VOLUME = 100;
 
-    public Radio() {
+    // Единственный конструктор с логикой валидации
+    public Radio(int maxStations) {
+        if (maxStations <= 0) {
+            this.maxStations = 10;
+        } else {
+            this.maxStations = maxStations;
+        }
         this.currentStation = 0;
         this.currentVolume = 0;
     }
 
-    // --- Работа с радиостанциями ---
-
     public void next() {
-        if (currentStation == MAX_STATION) {
-            currentStation = MIN_STATION;
+        if (currentStation == maxStations - 1) {
+            currentStation = 0;
         } else {
             currentStation++;
         }
     }
 
     public void prev() {
-        if (currentStation == MIN_STATION) {
-            currentStation = MAX_STATION;
+        if (currentStation == 0) {
+            currentStation = maxStations - 1;
         } else {
             currentStation--;
         }
     }
 
     public void setCurrentStation(int station) {
-        if (station < MIN_STATION || station > MAX_STATION) {
-            return; // игнорируем недопустимое значение
+        if (station < 0 || station >= maxStations) {
+            return;
         }
         this.currentStation = station;
     }
-
-    public int getCurrentStation() {
-        return currentStation;
-    }
-
-    // --- Работа с громкостью ---
 
     public void increaseVolume() {
         if (currentVolume < MAX_VOLUME) {
@@ -60,12 +59,8 @@ public class Radio {
 
     public void setCurrentVolume(int volume) {
         if (volume < MIN_VOLUME || volume > MAX_VOLUME) {
-            return; // игнорируем недопустимое значение
+            return;
         }
         this.currentVolume = volume;
-    }
-
-    public int getCurrentVolume() {
-        return currentVolume;
     }
 }

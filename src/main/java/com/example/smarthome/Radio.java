@@ -4,60 +4,68 @@ public class Radio {
     private int currentStation;
     private int currentVolume;
 
+    // Константы для границ
+    private static final int MIN_STATION = 0;
+    private static final int MAX_STATION = 9;
+    private static final int MIN_VOLUME = 0;
+    private static final int MAX_VOLUME = 100;
+
     public Radio() {
         this.currentStation = 0;
         this.currentVolume = 0;
     }
 
-    public int getCurrentStation() {
-        return currentStation;
-    }
-
-    public void setStation(int station) {
-        if (station >= 0 && station <= 9) {
-            this.currentStation = station;
-        } else {
-            this.currentStation = 0;
-        }
-    }
-
-    public int getCurrentVolume() {
-        return currentVolume;
-    }
-
-    public void setVolume(int volume) {
-        if (volume >= 0 && volume <= 100) {
-            this.currentVolume = volume;
-        } else {
-            this.currentVolume = 0;
-        }
-    }
+    // --- Работа с радиостанциями ---
 
     public void next() {
-        if (currentStation == 9) {
-            currentStation = 0;
+        if (currentStation == MAX_STATION) {
+            currentStation = MIN_STATION;
         } else {
             currentStation++;
         }
     }
 
     public void prev() {
-        if (currentStation == 0) {
-            currentStation = 9;
+        if (currentStation == MIN_STATION) {
+            currentStation = MAX_STATION;
         } else {
             currentStation--;
         }
     }
 
+    public void setCurrentStation(int station) {
+        if (station < MIN_STATION || station > MAX_STATION) {
+            return; // игнорируем недопустимое значение
+        }
+        this.currentStation = station;
+    }
+
+    public int getCurrentStation() {
+        return currentStation;
+    }
+
+    // --- Работа с громкостью ---
+
     public void increaseVolume() {
-        if (currentVolume < 100) {
+        if (currentVolume < MAX_VOLUME) {
             currentVolume++;
         }
     }
 
     public void decreaseVolume() {
-        if (currentVolume > 0) {
+        if (currentVolume > MIN_VOLUME) {
             currentVolume--;
         }
+    }
+
+    public void setCurrentVolume(int volume) {
+        if (volume < MIN_VOLUME || volume > MAX_VOLUME) {
+            return; // игнорируем недопустимое значение
+        }
+        this.currentVolume = volume;
+    }
+
+    public int getCurrentVolume() {
+        return currentVolume;
     }
 }
